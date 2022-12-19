@@ -1,0 +1,211 @@
+
+<style>
+    .label {
+        font-weight: bold;
+    }
+
+    body {
+        padding: 40px;
+        padding-top: 10px;
+        display: flex;
+        justify-content: center;
+        background-color: #f5f5f5;
+    }
+
+    body>div {
+        width: 50%;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+    }
+</style>
+
+<body>
+    <div style="display: flex;flex-direction: column;">
+        <h1>Usecase Web Application</h1>
+        <div class="label" for="">Shortlive Token</div>
+        <textarea id="token" rows="5"></textarea>
+        <div class="label" for="">Order Data</div>
+        <textarea id="order_data" style="flex-grow: 1;"></textarea>
+        <div>
+            <button id="submitButton" type="submit" onclick="clickSubmit()">submit</button>
+        </div>
+    </div>
+</body>
+<script>
+(function (w, d) {
+    const webnco = w.webnco = {};
+    webnco.setup = function (url) {
+        webnco.action = url;
+    }
+    webnco.open = function (data, callback) {
+        if (!data) {
+            return;
+        }
+        // const web_callback_url = data.web_callback_url;
+        
+        const form = d.createElement('form');
+        form.method = 'post';
+        form.action = webnco.action;
+        // form.target = 'webnco';
+    
+        const hiddenField = d.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = 'payload';
+        hiddenField.value = JSON.stringify(data);
+        form.appendChild(hiddenField);
+        const childForm = d.body.appendChild(form);
+        form.submit();
+        d.body.removeChild(childForm);
+
+        // clearInterval(webnco.intervalId);
+        // webnco.intervalId = setInterval(() => {
+        //     try {
+        //     if (popupWindow.document.URL.indexOf(web_callback_url) !== -1 || popupWindow.closed) {
+        //         clearInterval(webnco.intervalId);
+        //         popupWindow.close();
+
+        //         if (callback) {
+        //             callback();
+        //         }
+        //     }
+        //     } catch(e) {}
+        // }, 1000);
+    }
+})(window, document);
+webnco.setup('https://web-payment-uat.vinid.dev');
+</script>
+<script>
+    function clickSubmit() {
+        // document.getElementById('submitButton').disabled = true;
+        // fetch('https://api-uat.int.vinid.dev/wslt-service/v1/tokens', {
+        //     method: 'POST',
+        //     headers: {
+        //     'Content-Type': 'application/json',
+        //     'Authorization': 'Basic aW50ZXJuYWxfc2VydmljZTo4cEdRTVl3TnNYdnI='
+        //     },
+        //     redirect: 'follow', // manual, *follow, error
+        //     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        //     body: JSON.stringify({
+        //         user_id: 2003887
+        //     })
+        // }).then(res => {
+        // });
+            
+        const token = document.getElementById('token').value;
+        const order_data = document.getElementById('order_data').value;
+        webnco.open({
+            ...JSON.parse(order_data),
+            vin_idshort_token: JSON.parse(token)
+        }, () => {
+            console.log('ok');
+        })
+    }
+    function setValue() {
+        const token = document.getElementById('token');
+        const order_data = document.getElementById('order_data');
+        token.value = JSON.stringify(SHORTLIVE_TOKEN, undefined, 2);
+        order_data.value = JSON.stringify(USECASE_DATA_MOCK, undefined, 2);
+
+    }
+    const USECASE_DATA_MOCK = {
+  "payment_instrument": "INAPP",
+  "payment_flow": "NORMAL",
+  "request_time": 1649135165,
+  "store_code": "PAYOO4",
+  "signature": "AmO0BOFaQheqCrmJqFEsYWNI1D1WkvwhG25vfgdS3jxTv+PQ9ND5dNZOf2ovLK3DLwzM6bxjpjYxDTCyt6RMEGqoKz7tuPbmQLC8vveZXUZH4hiL51GGfQ52nbqraRcPlYuWSdZ4lsFbQck2n9k9Mm/k78q9jBh+QFqVt131/XTR1seIRMKpYmsLwc/xUqyTi059jhlVR/dqcg7K94A2aQiiz1tnLEMyhbabOVG7Ay6rbUxi4MAg/G+lhE56P5xr8bZg4PG/Uj0WkbWyScwWYD3dvOy5BYyd6bbSSuMVCHEdYeEITR+D0Xjo0i5xiG5qeUBhxi001oObdRSqaOJ6PA==",
+  "order_details": {
+    "code": "202204052000067",
+    "status": "ACTIVE",
+    "product_code": "INTERNET",
+    "items": [
+      {
+        "name": "07/2020",
+        "quantity": 0,
+        "product_code": "INTERNET",
+        "unit_price": 155000,
+        "code": "2000943660912365248100120220546211144",
+        "price": 155000,
+        "unit": "BILL",
+        "variant_code": "NET_SGT",
+        "customer_code": "0912365248",
+        "customer_code_ref": "0912365248",
+        "billing_provider_id": 41
+      }
+    ],
+    "created_at": 1649135165
+  },
+  "extra_data": {
+    "order_summary_detail": "Hoá đơn Internet - 0912365248 - Tuan Hoang"
+  },
+  "callback_url": "https://api-payment-uat.int.vinid.dev/bill-internal/order-confirmation",
+  "store": {
+    "code": "PAYOO4"
+  },
+  "service_code": "BILL",
+  "invoice_no": "A202204052000110",
+  "merchant": {
+    "code": "PAYOO"
+  },
+  "payment_configs": [
+    {
+      "payment_method_code": "DIRECT_PAYMENT",
+      "configs": {
+        "terminal_id": "PAYOO1NCC4",
+        "merchant_code": "PAYOO",
+        "merchant_id": "PAYOO1"
+      }
+    },
+    {
+      "configs": {
+        "terminal_id": "PAYOO1NCC4",
+        "merchant_code": "PAYOO",
+        "merchant_id": "PAYOO1"
+      },
+      "payment_method_code": "GROUP"
+    },
+    {
+      "payment_method_code": "POINT",
+      "configs": {
+        "terminal_id": "PAYOO1NCC4",
+        "merchant_code": "PAYOO",
+        "merchant_id": "PAYOO1"
+      }
+    },
+    {
+      "payment_method_code": "TOKENIZED",
+      "configs": {
+        "terminal_id": "PAYOO1NCC4",
+        "merchant_code": "PAYOO",
+        "merchant_id": "PAYOO1"
+      }
+    },
+    {
+      "payment_method_code": "WALLET",
+      "configs": {
+        "terminal_id": "PAYOO1NCC4",
+        "merchant_code": "PAYOO",
+        "merchant_id": "PAYOO1"
+      }
+    }
+  ],
+  "amount": 131000,
+  "original_amount": 131000,
+  "total_amount": 131000,
+  "web_callback_url": "http://localhost:3000/not-found",
+  "user_id": 2003887,
+  "vin_idshort_token": {
+    "token": "3A4CED4ADFEF11ECAF99EE7F1708925B",
+    "user_id": "2003887",
+    "expiration_at": 1652086451
+  }
+};
+    const SHORTLIVE_TOKEN = {
+  "token": "4ABB99F8E54C11ECA51B8E04C7F03F6E",
+  "user_id": "200102883",
+  "expiration_at": 1652086451
+};
+    setValue();
+</script>

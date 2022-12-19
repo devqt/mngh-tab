@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<script>
+  !function(e){"use strict";function r(e,n){var t=/[^\w\-.:]/.test(e)?new Function(r.arg+",tmpl","var _e=tmpl.encode"+r.helper+",_s='"+e.replace(r.regexp,r.func)+"';return _s;"):r.cache[e]=r.cache[e]||r(r.load(e));return n?t(n,r):function(e){return t(e,r)}}r.cache={},r.load=function(e){return document.getElementById(e).innerHTML},r.regexp=/([\s'\\])(?!(?:[^{]|\{(?!%))*%\})|(?:\{%(=|#)([\s\S]+?)%\})|(\{%)|(%\})/g,r.func=function(e,n,t,r,c,u){return n?{"\n":"\\n","\r":"\\r","\t":"\\t"," ":" "}[n]||"\\"+n:t?"="===t?"'+_e("+r+")+'":"'+("+r+"==null?'':"+r+")+'":c?"';":u?"_s+='":void 0},r.encReg=/[<>&"'\x00]/g,r.encMap={"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;","'":"&#39;"},r.encode=function(e){return(null==e?"":""+e).replace(r.encReg,function(e){return r.encMap[e]||""})},r.arg="o",r.helper=",print=function(s,e){_s+=e?(s==null?'':s):_e(s);},include=function(s,d){_s+=tmpl(s,d);}","function"==typeof define&&define.amd?define(function(){return r}):"object"==typeof module&&module.exports?module.exports=r:e.tmpl=r}(this);
+</script>
+<script type="text/x-tmpl" id="tmpl-demo">
+  <h3>{%=o.title%}</h3>
+  <p>Released under the
+  <a href="{%=o.url%}">{%=o.name%}</a>.</p>
+  <h4>Features</h4>
+  <div class="container">
+  {% for (var i=0; i<o.length; i++) { %}
+    <div class="bundle-note">
+      {% for (var j=1; j <= 3; j++) { %}
+      <div class="line">
+        <div class="line-hr"></div>
+        
+        {% var n = o[i].find(el => el[0] === j); %}
+        {% if (n) { %}
+          <div class="note">{%=n[1]%}</div>
+        {% } %}
+      </div>
+      {% } %}
+    </div>
+  {% } %}
+  </div>
+</script>
+<body>
+  <div id="result"></div>
+  <script>
+    var input = `
+    #1
+    34=42-2 25-4 60-2 32=44-4 
+    #2
+    NA+1.5 NA=NA-2 52-4 54-4 42-4 44-4 
+    #3
+    27=34-2 17-4 46-2 25=37-4 
+    #4
+    NA-2 NA=NA-2 0411-4 49-4 0511-4 40-4 
+    #5
+    34=42-2 25-4 60-2 32=44-4 
+    #6
+    NA+1.5 NA=NA-2 52-4 54-4 42-4 44-4 
+    #7
+    27=34-2 17-4 46-2 25=NA=37-4 NA-2 19-4 NA-2.5 NA=NA-2 39-4 NA=49-2.5 
+    #8
+    39-2 27-4 0210-2 19-4 50+1.5
+    `;
+
+    let data = [
+      [[1, 1], [3, 1], [2, 2]],
+      [[1, 2]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+      [[1, 3]],
+    ];
+    document.getElementById('result').innerHTML = tmpl('tmpl-demo', data);
+    </script>
+</body>
+</html>
